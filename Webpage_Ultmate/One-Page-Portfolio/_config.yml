@@ -1,0 +1,45 @@
+
+title: Anindya Kanti Mitra
+email: anindya15l12@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  If Content is King, Design is Queen, then Development is the Kingdom. Without Kingdom, King and Queen are nothing!
+  And I can help build your Empire!
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+twitter_username: akm_machine
+github_username:  AKM15machine
+
+author:
+    name: Anindya Kanti Mitra
+    email: anindya15l12@gmail.com
+social:
+  github: AKM15machine
+  twitter: akm_machine
+  facebook: anindyakanti.mitra.10
+  linkedin: www.linkedin.com/in/akm15machine
+
+# Build settings
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+port: 80
+timezone: Asia/Kolkata
+
+# Exclude from processing.
+# Excluded items can be processed by explicitly listing the directories or
+# their entries' file path in the `include:` list.
+#
+exclude:
+    -  Readme.md
+    -  favicon.ico
+#   - .sass-cache/
+#   - .jekyll-cache/
+#   - gemfiles/
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules/
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
