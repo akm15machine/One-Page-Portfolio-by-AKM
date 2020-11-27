@@ -2,21 +2,20 @@
 title: Anindya Kanti Mitra
 email: anindya15l12@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  If Content is King, Design is Queen, then Development is the Kingdom. Without Kingdom, King and Queen are nothing!
-  And I can help build your Empire!
+  -On the way to help building a better world, in the engineer's way!
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: akm_machine
-github_username:  AKM15machine
+github_username:  akm15machine
 
 author:
     name: Anindya Kanti Mitra
     email: anindya15l12@gmail.com
 social:
-  github: AKM15machine
+  github: akm15machine
   twitter: akm_machine
   facebook: anindyakanti.mitra.10
-  linkedin: www.linkedin.com/in/akm15machine
+  linkedin: akm15machine
 
 # Build settings
 theme: minima

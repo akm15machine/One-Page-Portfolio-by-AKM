@@ -1,0 +1,46 @@
+I"õ!<div>
+<h3>Hi there!</h3>
+
+&nbsp;In this blog, I will be discussing about the <a href="https://www.youtube.com/watch?v=Caz6hScxIUc&amp;t=30s" target="_blank">solid state tesla coil</a> that I made.<br />
+Well, when it comes to <abbr title="Solid State Tesla Coil">SSTC</abbr>, it is all about semiconductor devices doing all the switching operations, that means no spark gaps, no noises, and an overall quiet continuous mode operation. On the other hand, if we interrupt the otherwise continuous operation, in a controlled manner, we can also generate modulated sparks which can also be used to play simple music notations through it. Another fact is that, the primary side of the SSTC operates at rectified mains supply, i.e., about 310V DC, which is way lower than conventional <abbr title="Spark Gap Tesla Coil">SGTC</abbr>, which seem to use something about 2kV to 7kV. As a result of using lower voltage and lower impedance solid state driving makes the circuit more robust and easier to debug and analyse and do a lot more with an otherwise not-so interesting tesla coil. So let's dig into the construction and in-depth discussion about what exactly is going on.
+We are interested to break the entire tesla coil down into four sections:<br />
+<ul>
+<li><a href="#Transformer">Tesla coil -the air-core step up resonant transformer</a></li>
+<li><a href="#PLL">PLL oscillator</a></li>
+<li><a href="#Power">Inverter/Power section</a></li>
+<li><a href="#Interrupt">Interrupter circuit</a></li>
+</ul>
+<h4 id="Transformer">All about the tesla coil transformer</h4>
+<p>
+&nbsp;Well, the "high voltage" that we are fascinated about, is generated from this transformer or popularly what's called, the "tesla coil". In my build, I have used a secondary coil having height of 1.5<abbr title="Feet (30.48cm)">Ft</abbr>. and diameter of 3<abbr title="Inches (2.54cm)">inch</abbr>., having about 1200 turns. And the primary coil is wound around the secondary after wrapping about 20 layers of Polyester Film insulation between primary and secondary and it has 24 turns(I know it's quite extra, but it works very well and keeps the switching elements from being overdriven). Lastly, two steel dishes were connected at the top of the secondary coil, which makes for the capacitor in the resonator. The normal resonant frequency of the resonator is about 270kHz (Changes dynamically with spark length and nature of objects which come nearby).<br />
+&nbsp;But, it is often good practice to make the secondary coil shorter and wider instead of making it taller and narrower, as the voltage across the primary coil is less in any <abbr id="abbre" onclick="AndroidView('Solid State Tesla Coil')" title="Solid State Tesla Coil">SSTC</abbr>, we would want a overall higher coupling between primary and secondary winding. Meanwhile we have to keep in mind that there must be higher insulation or separation between the primary and secondary coil so, having a secondary coil shorter in height, is the best choice. Again, there is another factor to consider, as the potential gradient in the secondary coil from bottom to top is really high, and the voltage at the top may reach even 50kV or more, we should maintain a good balance between making the secondary shorter and still maintaining safe distance from the lower potential areas.
+</p>
+
+<h4 id="PLL">Oscillator and driver section</h4>
+<p>
+&nbsp;Without a proper oscillator, tuned to resonance, tesla coil won't be much different from a normal air-core resonant transformer. The tuned oscillator does the main magic here, and makes it easier to tune the circuit into resonance without needing to tune the oscillator manually everytime we change it's parameters slightly (which even includes just a human going near to the secondary coil, which changes the resonant frequency of the circuit).<br />
+&nbsp;After a lot of googling-research, I decided to settle with <abbr title="Phase Locked Loop">PLL</abbr> oscillator. Basically, it is something more than just a positive feedback from the resonator driving itself, which often leads to failure. Thess catastrophic failures are mostly solved by using the <a href="https://en.wikipedia.org/wiki/Phase-locked_loop#:~:text=A%20phase%2Dlocked%20loop%20or,detector%20in%20a%20feedback%20loop." target="_blank">phase-locked-loop</a>. A <a title="Download datasheet" href="https://www.ti.com/lit/gpn/cd4046b" target="_blank">CD4046</a>, which is a <abbr onclick="AndroidView('Phase Locked Loop')" title="Phase Locked Loop">PLL</abbr> chip, is used to generate a frequency of 270kHz by default, and it takes a signal from an antenna nearby connected to its pin 14 via a diode-clamped buffer arrangement(mainly for extra protection from overshoots), as a reference for the PLL operation and changes the frequency dynamically to keep the circuit in tune.<br />
+And ofcourse, for the interrupter arrangement, an opto-coupler 'A' was used to pull up the otherwise pulled down (with a 10k resistor) "inhibit" pin(pin 5) of the CD4046 IC and momentarily stop its oscillator's operation.
+</p>
+
+<h4 id="Power">Half-Bridge Inverter</h4>
+<p>
+&nbsp;After obtaining a tuned signal from the <a title="Download datasheet" href="https://www.ti.com/lit/gpn/cd4046b" target="_blank">CD4046</a> IC, the signal is fed into a MOSFET driver and then feed that signal into one of the windings of a <abbr title="Gate Drive Transformer">GDT</abbr>, consisting of three windings in the ratio 1:1:1. Then these signals are supplied to two <a href="https://html.alldatasheet.com/html-pdf/22409/STMICROELECTRONICS/IRFP460/1621/1/IRFP460.html" target="_blank">IRFP460</a> MOSFETs in the half-bridge. Now, as we already know from the above description, the driving frequency is very high to be handled at such a high (310V) voltage and high currents (peaks may even reach upto 20A or more), there remains a possibility of <a href="https://www.quora.com/What-is-the-meaning-of-shoot-through-in-inverter-circuits-and-how-do-you-prevent-it" target="_blank">shoot-throughs</a>. To avoid that in a simple way, without complicating the driving circuits to have dead-time (which can't be implemented easily on CD4046 either) I chose a rather simplier way to bypass the reverse recovery time of the slow and ineliminable body-diodes in the MOSFETs.<br />
+&nbsp;So firstly, I connected two low voltage schottky diodes(<a title="Datasheet" href="https://www.mouser.in/datasheet/2/345/sr320-sr3200-23712.pdf" target="_blank">SR-360</a>) in series from the "Source" of the uppper MOSFET to the "Drain" of the lower MOSFET, and took the junction of the diodes as the output of that half-bridge, and then attached two ultrafast high voltage diodes (<a title="Datasheet" href="https://html.alldatasheet.com/html-pdf/12590/ONSEMI/MUR1560/181/1/MUR1560.html" target="_blank">MUR1560</a>) for clamping the overshoots and catching the reverse (inductive) currents from the primary coil. So, by this arrangement, the reverse current is successfully handled by the fast external diodes, without stressing the MOSFET body-diodes and thereby making the circuit fail-safe.<br />
+&nbsp;Now, the other side of the primary coil was connected to a capacitive divider, and that is all about the inverter section. A conventional <a href="https://html.alldatasheet.com/html-pdf/34010/WTE/KBPC5010/47/1/KBPC5010.html" target="_blank">bridge rectifier</a>, takes ballasted 220V AC mains and feeds into a capacitor bank of 660uF (330uF), to supply to the inverter section. For the ballast, a 1000w  heater coil was used.
+</p>
+
+<h4 id="Interrupt">Interrupter(Tone generator) and modulator circuit</h4>
+<p>
+There's actually nothing special about the modulator circuit, a couple of 555 and 556 timer based synchronous and asynchronous tone generator circuits were assembled on a perfboard. And one of the selecter switches, switches between Tone and Audio. The audio modulator is nothing but an op-amp as a comparator, which is referenced at a constant voltage and it takes a line-level signal from any mp3 player and just converts it to a simple square wave to interrupt the oscillator, thereby generating a tone from the plasma spark.
+&nbsp;Now, as the plasma spark glows, the air around it expands rapidly creating a pressure-wave(or sound in other words) which creates a pop noise, so, if the tesla coil operation is switched or interrupted in a fast manner, so that the interrupting frequency remains in the audio range, a tone can be heard from the sparks.  Practically, my arrangement can easily play tones upto 5kHz, while maintaining stability.
+[caption](assets/AKM.jpg)
+</p>
+</div>
+<script>
+function AndroidView(s) {
+  document.getElementById(title).innerHTML = s;
+}
+</script>
+
+:ET
